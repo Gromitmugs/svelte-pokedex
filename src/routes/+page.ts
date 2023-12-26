@@ -11,7 +11,7 @@ export type IndexMonster = ApiMonster & {
 }
 
 export const load = (async ({ fetch }) => {
-	const response = await fetch ('https://pokeapi.co/api/v2/pokemon')
+	const response = await fetch ('https://pokeapi.co/api/v2/pokemon?limit=50')
 	const json = await response.json()
 	const monsters: IndexMonster[] = json.results.map((monster: ApiMonster) => {
 		const splitUrl = monster.url.split('/')
