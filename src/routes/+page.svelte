@@ -4,6 +4,7 @@
   import type { IndexMonster } from "./+page";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import Monster from "./Monster.svelte";
 
   // svelteKit special syntax for retrieving data from load fn
   export let data: PageData;
@@ -25,11 +26,12 @@
   };
 </script>
 
-<h1>{monsterId}</h1>
-<h2>{monster?.name}</h2>
-
-<h1>{monsterId2}</h1>
-<h2>{monster2?.name}</h2>
+{#if monster}
+  <Monster {monster} {updateSearchParams} />
+{/if}
+{#if monster2}
+  <Monster monster={monster2} {updateSearchParams} />
+{/if}
 
 <div class="generations">
   {#each generations as generation (generation.id)}
@@ -39,24 +41,7 @@
 
 <div class="monsters">
   {#each data.monsters as monster (monster.id)}
-    <div class="monster">
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div on:click={() => updateSearchParams("monsterId", monster.id)}>
-        <div class="monster-content">
-          <img src={monster.image} alt={monster.name} />
-          {monster.name}
-        </div>
-        <div class="monster-id">
-          {monster.id}
-        </div>
-      </div>
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div on:click={() => updateSearchParams("monsterId2", monster.id)}>
-        Add Monster 2
-      </div>
-    </div>
+    <Monster {monster} {updateSearchParams} />
   {/each}
 </div>
 
