@@ -10,21 +10,34 @@ export type IndexMonster = ApiMonster & {
 	image: string,
 }
 
-export const load = (async ({ fetch }) => {
-	const response = await fetch ('https://pokeapi.co/api/v2/pokemon?limit=50')
-	const json = await response.json()
-	const monsters: IndexMonster[] = json.results.map((monster: ApiMonster) => {
-		const splitUrl = monster.url.split('/')
-		const id = splitUrl[splitUrl.length -2]
-		return {
-			name: monster.name,
-			url: monster.url,
-			id,
-			image:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
-		}
-	})
+export const load = (async ({ fetch, url }) => {
+	const generationId = url.searchParams.get("generation_id") || "1";
+	let monsterList = [];
+
+	if(generationId == "all") {
+		const response = await fetch ('https://pokeapi.co/api/v2/pokemon?limit=1500')
+		const json = await response.json()
+		monsterList = json.results
+	} else {
+		const generationResponse = await fetch(`https://pokeapi.co/api/v2/generation/${generationId}`)
+		const generationJson = await generationResponse.json();
+		monsterList = generationJson.pokemon_species
+	}
 
 	return {
-			monsters
-	}
-}) satisfies PageLoad
+		monsters: parseJSONResult(monsterList),
+	};
+}) satisfies PageLoad;
+
+function parseJSONResult(input: any): IndexMonster[] {
+	return input.map((monster: IndexMonster) => {
+			const splitUrl = monster.url.split('/')
+			const id = splitUrl[splitUrl.length -2]
+			return {
+				name: monster.name,
+				url: monster.url,
+				id: id,
+				image:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+			}
+		})
+}
