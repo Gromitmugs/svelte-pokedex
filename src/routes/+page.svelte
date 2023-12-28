@@ -24,6 +24,19 @@
     searchParams.set(key, value);
     goto(`?${searchParams.toString()}`);
   };
+
+  // search fn
+  let form = {
+    searchString: "",
+  };
+  let searchString = "";
+  $: selectedMonsters = data.monsters.filter((monster) => {
+    return monster.name.toLowerCase().includes(searchString.toLowerCase());
+  });
+
+  const submitSearch = (e: Event) => {
+    searchString = form.searchString;
+  };
 </script>
 
 {#if monster}
@@ -39,8 +52,18 @@
   {/each}
 </div>
 
+<form class="search-form" on:submit={submitSearch}>
+  <input
+    class="search-field"
+    type="text"
+    bind:value={form.searchString}
+    placeholder="Pokemon Name"
+  />
+  <input type="submit" value="Search" />
+</form>
+
 <div class="monsters">
-  {#each data.monsters as monster (monster.id)}
+  {#each selectedMonsters as monster (monster.id)}
     <Monster {monster} {updateSearchParams} />
   {/each}
 </div>
@@ -97,5 +120,27 @@
 
   .generation:hover {
     background-color: #eee;
+  }
+
+  .search-form {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .search-form input[type="text"] {
+    padding: 5px 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    width: 200px;
+  }
+
+  .search-form input[type="submit"] {
+    padding: 5px 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin-left: 10px;
+    background-color: #333;
+    color: #fff;
   }
 </style>
