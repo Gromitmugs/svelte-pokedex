@@ -6,6 +6,8 @@
   import { goto } from "$app/navigation";
   import Monster from "./Monster.svelte";
 
+  import { count, doubleCount } from "$lib/stores";
+
   // svelteKit special syntax for retrieving data from load fn
   export let data: PageData;
   // PageData tells the type object by looking at the result from load fn
@@ -40,6 +42,10 @@
     searchString = form.searchString;
   };
 </script>
+
+// when using store values, don't forget to use $ sign to access the stores
+value.
+<h2>{$count}, {$doubleCount}</h2>
 
 {#if monster}
   <Monster {monster} {updateSearchParams} />
