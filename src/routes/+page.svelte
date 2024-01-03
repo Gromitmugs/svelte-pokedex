@@ -15,12 +15,6 @@
   // $: alert("count is" + count);
   // this $ statement will trigger every time whenever the variable is updated
 
-  $: monsterId = $page.url.searchParams.get("monsterId") || "";
-  $: monster = data.monsters.find((monster) => monster.id === monsterId);
-
-  $: monsterId2 = $page.url.searchParams.get("monsterId2") || "";
-  $: monster2 = data.monsters.find((monster) => monster.id === monsterId2);
-
   $: selectedGenerationId = $page.url.searchParams.get("generation_id") || "";
 
   const updateSearchParams = (key: string, value: string) => {
@@ -43,16 +37,9 @@
   };
 </script>
 
-// when using store values, don't forget to use $ sign to access the stores
-value.
-<h2>{$count}, {$doubleCount}</h2>
-
-{#if monster}
-  <Monster {monster} {updateSearchParams} />
-{/if}
-{#if monster2}
-  <Monster monster={monster2} {updateSearchParams} />
-{/if}
+<!-- when using store values, don't forget to use $ sign to access the stores
+value. -->
+<!-- <h2>{$count}, {$doubleCount}</h2> -->
 
 <div class="generations">
   <button
@@ -86,7 +73,7 @@ value.
 
 <div class="monsters">
   {#each selectedMonsters as monster (monster.id)}
-    <Monster {monster} {updateSearchParams} />
+    <Monster {monster} />
   {/each}
 </div>
 
@@ -96,32 +83,6 @@ value.
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-  }
-
-  .monster {
-    width: 100px;
-    margin: 10px;
-    padding: 10px;
-    position: relative;
-    background-color: #eee;
-  }
-
-  .monster:hover {
-    background-color: #ddd;
-  }
-
-  .monster-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .monster-id {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    font-size: 0.8em;
-    color: #aaa;
   }
 
   .generations {

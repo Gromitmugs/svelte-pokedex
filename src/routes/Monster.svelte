@@ -1,15 +1,21 @@
 <script lang="ts">
   import type { IndexMonster } from "./+page";
+  import { caughtMonsters } from "$lib/stores";
 
   export let monster: IndexMonster;
 
-  export let updateSearchParams: (key: string, value: string) => void;
+  const catchMonster = () => {
+    caughtMonsters.update((monsters) => {
+      return [...monsters, monster]
+    })
+    console.log("catch monster", monster);
+  };
 </script>
 
 <div class="monster">
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div on:click={() => updateSearchParams("monsterId", monster.id)}>
+  <div on:click={catchMonster}>
     <div class="monster-content">
       <img src={monster.image} alt={monster.name} />
       {monster.name}
@@ -18,21 +24,9 @@
       {monster.id}
     </div>
   </div>
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div on:click={() => updateSearchParams("monsterId2", monster.id)}>
-    Add Monster 2
-  </div>
 </div>
 
 <style>
-  .monsters {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
   .monster {
     width: 100px;
     margin: 10px;
@@ -57,25 +51,5 @@
     left: 8px;
     font-size: 0.8em;
     color: #aaa;
-  }
-
-  .generations {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .generation {
-    margin: 5px;
-    border: 1px solid;
-    padding: 5px 10px;
-    border: 1px solid black;
-    background-color: #f9f9f9;
-    color: #333;
-  }
-
-  .generation:hover {
-    background-color: #eee;
   }
 </style>
